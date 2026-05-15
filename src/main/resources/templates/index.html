@@ -24,9 +24,14 @@
     <div class="d-flex align-items-center mb-4 gap-3">
         <h1 class="mb-0">Clipboard Server</h1>
         <span class="badge bg-secondary fs-6" th:text="${#lists.size(items)} + ' item(s)'"></span>
-        <button type="button" class="btn btn-success ms-auto" data-bs-toggle="modal" data-bs-target="#addItemModal">
-            + Add Item
-        </button>
+        <div class="ms-auto d-flex gap-2">
+            <a href="/cliphandler-clients.zip" class="btn btn-outline-secondary" download>
+                Download Clients
+            </a>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                + Add Item
+            </button>
+        </div>
     </div>
 
     <form method="get" action="/" class="row g-2 mb-4">
