@@ -22,6 +22,16 @@ public class ClipboardWebController {
         return "index";
     }
 
+    @PostMapping("/add")
+    public String addItem(
+            @RequestParam String username,
+            @RequestParam String name,
+            @RequestParam String content,
+            @RequestParam(required = false, defaultValue = "") String filterUser) {
+        service.upsert(username, name, content, false);
+        return filterUser.isBlank() ? "redirect:/" : "redirect:/?username=" + filterUser;
+    }
+
     @PostMapping("/clear/{username}/{name}")
     public String clearItem(
             @PathVariable String username,
