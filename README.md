@@ -130,6 +130,41 @@ By default all clients connect to `http://localhost:8080`. Use `--server` to poi
 python3 client/clipcopy.py alice note --text "hi" --server http://192.168.1.50:8080
 ```
 
+## wget examples
+
+The API returns JSON, so pulling content with `wget` requires extracting the `content` field. These one-liners use `python3 -c` to avoid a dependency on `jq`.
+
+**Pull text to stdout:**
+```bash
+wget -qO- http://localhost:8080/api/clipboard/alice/mysnippet \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['content'], end='')"
+```
+
+**Pull text into a variable:**
+```bash
+TEXT=$(wget -qO- http://localhost:8080/api/clipboard/alice/mysnippet \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['content'], end='')")
+```
+
+**Pull a file (base64-decode back to binary):**
+```bash
+wget -qO- http://localhost:8080/api/clipboard/alice/myfile \
+  | python3 -c "import sys,json,base64; sys.stdout.buffer.write(base64.b64decode(json.load(sys.stdin)['content']))" \
+  > recovered.pdf
+```
+
+If `jq` is available it's more concise:
+
+```bash
+# text
+wget -qO- http://localhost:8080/api/clipboard/alice/mysnippet | jq -r '.content'
+
+# file
+wget -qO- http://localhost:8080/api/clipboard/alice/myfile | jq -r '.content' | base64 -d > recovered.pdf
+```
+
+Replace `localhost:8080` with your server's address and port as needed.
+
 ## REST API
 
 | Method | Path | Description |
