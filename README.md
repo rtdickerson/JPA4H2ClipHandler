@@ -29,6 +29,45 @@ java -jar target/cliphandler-0.0.1-SNAPSHOT.jar
 
 The server starts on port 8080. The H2 database is stored in `./data/cliphandler` (created automatically on first run).
 
+### Changing the port
+
+Edit `src/main/resources/application.properties`:
+```properties
+server.port=8080
+```
+
+Or override at runtime without changing the file:
+```bash
+# From source
+mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=9090
+
+# From JAR
+java -jar target/cliphandler-0.0.1-SNAPSHOT.jar --server.port=9090
+```
+
+### Firewall
+
+The server port must be open on the host for clients on other machines to reach it. On Linux with `firewalld`:
+
+```bash
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+```
+
+On Linux with `ufw`:
+
+```bash
+sudo ufw allow 8080/tcp
+```
+
+On Windows (PowerShell, run as Administrator):
+
+```powershell
+New-NetFirewallRule -DisplayName "ClipHandler" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
+```
+
+Replace `8080` with whatever port you configured.
+
 | URL | Purpose |
 |-----|---------|
 | `http://localhost:8080/` | Web UI — browse and clear clipboard items |
